@@ -1,1 +1,1 @@
-FROM python:3.12 AS Builder
+FROM python AS Builder
