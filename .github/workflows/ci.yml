@@ -38,7 +38,7 @@ jobs:
             - name: Checkout Code
               uses: actions/checkout@v7
 
-            - name: Checks that base images are pinned
+            - name: Checks that Docker images are pinned
               id: docker-lint
               continue-on-error: true
               uses: DhruvP2205/P9-Docker-Action@main
