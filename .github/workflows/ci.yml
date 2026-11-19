@@ -31,3 +31,33 @@ jobs:
 
             - name: Run Test
               run: python -m unittest -v
+
+    lint-the-dockerfile:
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v7
+
+            - name: Checks that base images are pinned
+              id: docker-lint
+              continue-on-error: true
+              uses: DhruvP2205/P9-Docker-Action@main
+              with:
+                dockerfile: ./Dockerfile
+                fail_on_unpinned: "true"
+
+            - name: Checkout Docker Pinned Report
+              env:
+                actual_count: ${{ steps.docker-lint.outputs.unpinned_count }}
+                actual_report: ${{ steps.docker-lint.outputs.report }}
+                ACTUAL_OUTCOME: ${{ steps.docker-lint.outcome }}
+              run: |
+                echo "Docker Lint Job: $ACTUAL_OUTCOME"
+                echo "Unpinned Dockerfile Found: $actual_count"
+                echo "----> REPORT <----"
+                echo "$actual_report"
+
+                if [ "$ACTUAL_OUTCOME" -eq "failure" ]; then
+                    echo "Job Failed"
+                    exit 1
+                fi
