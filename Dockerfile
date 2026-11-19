@@ -1,1 +1,1 @@
-FROM python AS Builder
+FROM python
