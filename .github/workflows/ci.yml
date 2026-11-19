@@ -18,7 +18,7 @@ jobs:
     ci-pipeline:
         strategy:
             matrix:
-                python-version: [3.11, 3.12]
+                python-version: ["3.11", "3.12"]
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout Code
@@ -57,7 +57,7 @@ jobs:
                 echo "----> REPORT <----"
                 echo "$actual_report"
 
-                if [ "$ACTUAL_OUTCOME" -eq "failure" ]; then
+                if [ "$ACTUAL_OUTCOME" != "success" ]; then
                     echo "Job Failed"
                     exit 1
                 fi
