@@ -70,7 +70,7 @@ jobs:
           uses: actions/checkout@v7
 
         - name: Build Docker Image and Run
-          run: docker buildx build -t demo-app:ci .
+          run: docker build -t demo-app:ci .
 
         - name: Check the Image
           run: docker images
@@ -85,7 +85,7 @@ jobs:
           run: |
             echo "Waiting for /health endpoint (Takes 30s)..."
               for i in {1..30}; do
-                  if curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/healthss | grep -q "200"; then
+                  if curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/health | grep -q "200"; then
                       echo "Health check passed!"
                       exit 0
                   fi
