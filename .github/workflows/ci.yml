@@ -85,7 +85,7 @@ jobs:
           run: |
             echo "Waiting for /health endpoint (Takes 30s)..."
               for i in {1..30}; do
-                  if curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/health | grep -q "200"; then
+                  if curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/healthzz | grep -q "200"; then
                       echo "Health check passed!"
                       exit 0
                   fi
@@ -98,5 +98,5 @@ jobs:
 
         - name: Stop Running Container
           if: always()
-          run: docker rm -f demo-app
+          run: docker rm -f demo-app || true
 
