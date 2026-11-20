@@ -61,3 +61,42 @@ jobs:
                     echo "Job Failed"
                     exit 1
                 fi
+
+    build-and-test:
+      needs: ["ci-pipeline","lint-the-dockerfile"]
+      runs-on: ubuntu-24.04
+      steps:
+        - name: Checkout Code
+          uses: actions/checkout@v7
+
+        - name: Build Docker Image and Run
+          run: docker buildx build -t demo-app:ci .
+
+        - name: Check the Image
+          run: docker images
+
+        - name: Run Container
+          run: docker run -d --name demo-app -p 8080:8000 demo-app:ci
+
+        - name: Check the Running Container
+          run: docker ps
+
+        - name: Smoke Test
+          run: |
+            echo "Waiting for /health endpoint (Takes 30s)..."
+              for i in {1..30}; do
+                  if curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/health | grep -q "200"; then
+                      echo "Health check passed!"
+                      exit 0
+                  fi
+                  sleep 1
+              done
+
+              echo "Health check failed! Container logs:"
+              docker logs demo-app
+              exit 1
+
+        - name: Stop Running Container
+          if: always()
+          run: docker rm -f demo-app
+
