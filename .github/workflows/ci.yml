@@ -134,7 +134,6 @@ jobs:
             images: ghcr.io/${{ env.OWNER_LOWER }}/p10-capstone-project
             tags: |
               type=sha,format=short,prefix=sha-
-              type=raw,value=latest,enable=${{ startsWith(github.ref, 'refs/tags/v') }}
               type=semver,pattern={{version}}
               type=semver,pattern={{major}}.{{minor}}
               type=semver,pattern={{major}}
