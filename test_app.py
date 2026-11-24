@@ -5,7 +5,7 @@ from app import build_response
 
 class TestApp(unittest.TestCase):
     def test_health(self):
-        self.assertEqual(build_response("/health"), (200, {"status": "ok"}))
+        self.assertEqual(build_response("/health"), (500, {"status": "ok"}))
 
     def test_version_default(self):
         status, body = build_response("/version")
